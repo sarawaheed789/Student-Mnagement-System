@@ -30,29 +30,65 @@
             ?>
             <!-- Top Bar End -->
             <?php
-                $student_id = $_REQUEST['std_id'];
-                $student_Name= $_REQUEST['fullName'];
-                $std_f_name = $_REQUEST['father_Name'];
-                $student_contact = $_REQUEST['stud_number'];
-                $student_address= $_REQUEST['stud_address'];
-                $std_email = $_REQUEST['stud_email'];
-                $student_dob = $_REQUEST['dob'];
-                $student_cnic= $_REQUEST['stud_cnic'];
-                $std_cnicPic = $_REQUEST['cnicPic'];
-                $student_Pic = $_REQUEST['studentPic'];
-                $student_status= $_REQUEST['std_status'];
-                include "dbdata.php";
-                $sql = "INSERT INTO students SET std_id ='$student_id', std_name ='$student_Name', f_name = '$std_f_name', contact_no = '$student_contact', std_address = '$student_address', std_email = '$std_email', std_cnic = '$student_cnic',  std_dob = '$student_dob',  cnic_picture = '$std_cnicPic',  std_picture = '$student_Pic', std_status = '$student_status'";
-                $result = mysqli_query($connect, $sql);
+include 'dbdata.php';
 
-                if($result > 0){
-                echo "<p class='px-4 pt-5'>1 More Record Inserted</p>";
-                echo "<a href = 'student.php' class='px-4 pt-5'> View Data </a>";
-                }
-                else{
-                    echo "error";
-                }    
-            ?>
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Sanitize and collect form data
+    $std_id = mysqli_real_escape_string($connect, $_POST['std_id']);
+    $fullName = mysqli_real_escape_string($connect, $_POST['fullName']);
+    $fatherName = mysqli_real_escape_string($connect, $_POST['father_Name']);
+    $contact = mysqli_real_escape_string($connect, $_POST['stud_number']);
+    $address = mysqli_real_escape_string($connect, $_POST['stud_address']);
+    $email = mysqli_real_escape_string($connect, $_POST['stud_email']);
+    $dob = mysqli_real_escape_string($connect, $_POST['dob']);
+    $cnic = mysqli_real_escape_string($connect, $_POST['stud_cnic']);
+    $status = mysqli_real_escape_string($connect, $_POST['std_status']);
+
+    // File Uploads
+    $cnicPic = $_FILES['cnicPic'];
+    $studentPic = $_FILES['studentPic'];
+
+    // File upload directories
+    $uploadDir = "uploads/";
+
+    // Handle CNIC Picture
+    $cnicPicName = time() . "_" . basename($cnicPic['name']);
+    $cnicTarget = $uploadDir . $cnicPicName;
+
+    // Handle Student Picture
+    $studentPicName = time() . "_" . basename($studentPic['name']);
+    $studentTarget = $uploadDir . $studentPicName;
+
+    // Upload CNIC Picture
+    if (!move_uploaded_file($cnicPic['tmp_name'], $cnicTarget)) {
+        die("Error uploading CNIC Picture.");
+    }
+
+    // Upload Student Picture
+    if (!move_uploaded_file($studentPic['tmp_name'], $studentTarget)) {
+        die("Error uploading Student Picture.");
+    }
+
+    // Insert query
+    $sql = "INSERT INTO students 
+        (std_id, std_name, f_name, contact_no, std_address, std_email, std_dob, std_cnic, cnic_picture, std_picture, std_status)
+        VALUES 
+        ('$std_id', '$fullName', '$fatherName', '$contact', '$address', '$email', '$dob', '$cnic', '$cnicTarget', '$studentTarget', '$status')";
+
+    if (mysqli_query($connect, $sql)) {
+        echo "<script>
+            alert('Student added successfully!');
+            
+        </script>";
+        echo "<a href = 'student.php' class='px-4 pt-5'> View Data </a>";
+    } else {
+        echo "Error: " . mysqli_error($connect);
+    }
+} else {
+    echo "Invalid request method!";
+}
+?>
+
         </div>
         <!--End Content-->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

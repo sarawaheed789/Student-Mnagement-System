@@ -65,7 +65,10 @@
                 <!--Start Student Table -->
                 <?php
                     include "dbdata.php";
-                    $sql = "select * from enrollment";
+                    $sql = "SELECT e.enroll_id, s.std_name, c.course_name, e.roll_no, e.enroll_session, e.shift 
+                    FROM enrollment e
+                    JOIN students s ON e.EStd_id = s.std_id
+                    JOIN courses c ON e.ECourse_id = c.course_id";
                     $result =mysqli_query($connect, $sql);
                     
                 ?>
@@ -74,8 +77,8 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Enroll_id</th>
-                                        <th>EStd_id</th>
-                                        <th>ECourse_id</th>
+                                        <th>EStd_Name</th>
+                                        <th>ECourse_Name</th>
                                         <th>Roll NO</th>
                                         <th>Session</th>
                                         <th>Shift</th>
@@ -88,8 +91,8 @@
                                     echo "
                                         <tr>
                                             <td>$row[enroll_id]</td>
-                                            <td>$row[EStd_id]</td>
-                                            <td>$row[ECourse_id]</td>
+                                            <td>$row[std_name]</td>
+                                            <td>$row[course_name]</td>
                                             <td>$row[roll_no]</td>
                                             <td>$row[enroll_session]</td>
                                             <td><span class='status-badge status-active status-inactive'>$row[shift]</span></td>
@@ -108,6 +111,12 @@
             </div>
         </div>
         <!-- Add Student Table Start -->
+         <?php
+            include "dbdata.php";
+            $studentResult = mysqli_query($connect, "SELECT * FROM students");
+            $courseResult = mysqli_query($connect, "SELECT * FROM courses");        
+        ?>
+        
         <div class="modal fade" id="addenrollmentModal" tabindex="-1" aria-labelledby="addenrollmentModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -122,11 +131,21 @@
                             </div>
                             <div class="mb-3">
                                 <label for="enrollStd_id" class="form-label">EStd_id</label>
-                                <input type="text" class="form-control" id="enrollStd_id" name="EnrollStd_id" required>
+                                <select class="form-select" id="enrollStd_id" name = "EnrollStd_id" required>
+                                    <option value="">Select Student ID</option>
+                                    <?php while($row = mysqli_fetch_array($studentResult)) {
+                                        echo "<option value='{$row['std_id']}'>{$row['std_id']} - {$row['std_name']}</option>";
+                                    } ?>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="enrollCourse_id" class="form-label">ECourse_id</label>
-                                <input type="text" class="form-control" id="enrollCourse_id" name = "EnrollCourse_id" required>
+                                <select class="form-select" id="enrollCourse_id" name = "EnrollCourse_id" required>
+                                    <option value="">Select Course ID</option>
+                                    <?php while($row = mysqli_fetch_array($courseResult)) {
+                                        echo "<option value='{$row['course_id']}'>{$row['course_id']} - {$row['course_name']}</option>";
+                                    } ?>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="rollno" class="form-label">Roll NO</label>
@@ -146,7 +165,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Enroll</button>
+                            <button type="submit" name="submit" class="btn btn-primary">Enroll</button>
                         </div>
                     </form>
                 </div>

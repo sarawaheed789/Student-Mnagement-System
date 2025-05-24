@@ -101,12 +101,33 @@
                                         <td>$row[std_email]</td>
                                         <td>$row[std_cnic]</td>
                                         <td>$row[std_dob]</td>
-                                        <td>$row[cnic_picture]</td>
+                                        <td>
+                                            <a href='$row[cnic_picture]' target='_blank' class='btn btn-sm btn-outline-primary'>
+                                                <i class='bi bi-eye'></i> View
+                                            </a>
+                                        </td>
                                         <td><span class='status-badge status-active status-inactive'>$row[std_status]</span></td>
                                         <td>
                                             <i class='bi bi-pencil-fill text-primary me-2' title='Edit' role='button'></i>
                                             <a href='student_del.php?did=" . $row['std_id'] . "'><i class='bi bi-trash-fill text-danger' title='Delete' role='button'></i></a>
                                         </td>  
+                                        <td>
+                                            <button class='btn btn-sm btn-info viewBtn' 
+                                                data-id='$row[std_id]'
+                                                data-name='$row[std_name]'
+                                                data-fname='$row[f_name]'
+                                                data-contact='$row[contact_no]'
+                                                data-address='$row[std_address]'
+                                                data-email='$row[std_email]'
+                                                data-cnic='$row[std_cnic]'
+                                                data-dob='$row[std_dob]'
+                                                data-status='$row[std_status]'
+                                                data-picture='$row[std_picture]'
+                                                data-bs-toggle='modal' 
+                                                data-bs-target='#viewStudentModal'>
+                                                <i class='bi bi-eye-fill'></i> View
+                                            </button>
+                                        </td>
                                     </tr>";
                                 } 
                             ?>   
@@ -138,85 +159,193 @@
                         
                         <!-- Form Content -->
                         <div class="col-md-8 col-lg-9">
-                            <form id="addStudentForm" name="student_form" method="post" action="insert_student.php">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="addStudentModalLabel">Student Registration</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="std_id" class="form-label">Student ID *</label>
-                                            <input type="text" class="form-control" id="std_id" name="std_id">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="studentName" class="form-label">Full Name *</label>
-                                            <input type="text" class="form-control" id="studentName" name="fullName">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="FatherName" class="form-label">Father's Name *</label>
-                                            <input type="text" class="form-control" id="FatherName" name="father_Name">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="contactNo" class="form-label">Contact Number *</label>
-                                            <input type="text" class="form-control" id="contactNo" name="stud_number">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="std_address" class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="std_address" name="stud_address">
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="std_email" class="form-label">Email Address *</label>
-                                            <input type="email" class="form-control" id="std_email" name="stud_email">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="dob" class="form-label">Date of Birth *</label>
-                                            <input type="date" class="form-control" id="dob" name="dob">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="std_cnic" class="form-label">CNIC Number *</label>
-                                        <input type="text" class="form-control" id="std_cnic" name="stud_cnic">
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="cnicPic" class="form-label">CNIC Picture</label>
-                                            <input type="file" class="form-control" id="cnicPic" name="cnicPic" accept=".pdf">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="studentPic" class="form-label">Student Picture</label>
-                                            <input type="file" class="form-control" id="studentPic" name="studentPic" accept=".pdf, image/*">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mb-3">
-                                        <label for="status" class="form-label">Status</label>
-                                        <select class="form-select" id="status" name="std_status">
-                                            <option value="active">Active</option>
-                                            <option value="inactive">Inactive</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Add Student</button>
-                                </div>
-                            </form>
+                               <form id="addStudentForm" name="student_form" method="post" action="insert_student.php" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStudentModalLabel">Student Registration</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="std_id" class="form-label">Student ID *</label>
+                            <input type="text" class="form-control" id="std_id" name="std_id">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="studentName" class="form-label">Full Name *</label>
+                            <input type="text" class="form-control" id="studentName" name="fullName">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="FatherName" class="form-label">Father's Name *</label>
+                            <input type="text" class="form-control" id="FatherName" name="father_Name">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="guardianName" class="form-label">Guardian Name *</label>
+                            <input type="text" class="form-control" id="guardianName" name="guardian_name">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="guardianCNIC" class="form-label">Guardian CNIC *</label>
+                            <input type="text" class="form-control" id="guardianCNIC" name="guardian_cnic">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="gender" class="form-label">Gender *</label>
+                            <select class="form-select" id="gender" name="gender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="contactNo" class="form-label">Contact Number *</label>
+                            <input type="text" class="form-control" id="contactNo" name="stud_number">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="std_email" class="form-label">Email Address *</label>
+                            <input type="email" class="form-control" id="std_email" name="stud_email">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">Username *</label>
+                            <input type="text" class="form-control" id="username" name="username">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password *</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="std_address" class="form-label">Address *</label>
+                        <input type="text" class="form-control" id="std_address" name="stud_address">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="dob" class="form-label">Date of Birth *</label>
+                            <input type="date" class="form-control" id="dob" name="dob">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="std_cnic" class="form-label">CNIC Number *</label>
+                            <input type="text" class="form-control" id="std_cnic" name="stud_cnic">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cnicPic" class="form-label">CNIC Picture</label>
+                            <input type="file" class="form-control" id="cnicPic" name="cnicPic" accept=".pdf">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="studentPic" class="form-label">Student Picture</label>
+                            <input type="file" class="form-control" id="studentPic" name="studentPic" accept=".pdf, image/*">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="std_status">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add Student</button>
+                </div>
+            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Add Student Modal End -->
+
+
+        <!-- View Student Modal -->
+<!-- View Student Modal -->
+<div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-primary">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="viewStudentModalLabel">Student Full Details</h5>
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- Centered Larger Image -->
+        <div class="text-center mb-4">
+          <img id="viewPicture" class="img-fluid rounded shadow" style="max-height: 220px;" alt="Student Picture">
+        </div>
+
+        <!-- Info Table with View PDF Button Inside -->
+        <table class="table table-bordered view-Table">
+          <tbody>
+            <tr>
+              <th>ID</th>
+              <td id="viewId"></td>
+            </tr>
+            <tr>
+              <th>Name</th>
+              <td id="viewName"></td>
+            </tr>
+            <tr>
+              <th>Father Name</th>
+              <td id="viewFname"></td>
+            </tr>
+            <tr>
+              <th>Contact</th>
+              <td id="viewContact"></td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td id="viewAddress"></td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td id="viewEmail"></td>
+            </tr>
+            <tr>
+              <th>CNIC</th>
+              <td id="viewCnic"></td>
+            </tr>
+            <tr>
+              <th>Date of Birth</th>
+              <td id="viewDob"></td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td id="viewStatus"></td>
+            </tr>
+            <tr>
+              <th>PDF</th>
+              <td>
+                <a href="#" id="viewPdfBtn" target="_blank" class="btn btn-outline-danger btn-sm">
+                  <i class="bi bi-file-earmark-pdf-fill"></i> View PDF
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
         <!--Content End-->
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

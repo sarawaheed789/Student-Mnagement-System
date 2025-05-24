@@ -93,13 +93,14 @@ body {
   opacity: 0;
   transition: opacity 0.3s ease;
 }
-table th{
-  text-align: center;
-}
 table th, td{
-  
+  text-align: center;
   vertical-align: middle;
   font-size: 80%;
+}
+.view-Table th{
+  width: 30%;
+  background-color:rgba(0, 0, 0, 0.1);
 }
 /* Form styling */
 .form-container {
