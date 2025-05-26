@@ -62,9 +62,10 @@
                 <!--Start Courses Table -->
                 <?php
                     include "dbdata.php";
-                    $sql = "select * from courses";
+                    $sql = "SELECT c.course_id, c.course_code, c.course_name, t.tfull_name, c.course_duration, c.course_description, c.course_outline 
+                    FROM courses c
+                    JOIN teachers t ON c.tcourse_id = t.tch_Id";
                     $result =mysqli_query($connect, $sql);
-                    
                 ?>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover bg-white shadow-sm">
@@ -76,6 +77,7 @@
                                         <th>Instructor</th>
                                         <th>Duration</th>
                                         <th>Description</th>
+                                        <th>Outline</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -87,9 +89,14 @@
                                             <td>$row[course_id]</td>
                                             <td>$row[course_code]</td>
                                             <td>$row[course_name]</td>
-                                            <td>$row[course_instructor]</td>
+                                            <td>$row[tfull_name]</td>
                                             <td>$row[course_duration]</td>
                                             <td>$row[course_description]</td>
+                                            <td>
+                                            <a href='$row[course_outline]' target='_blank' class='btn btn-sm btn-outline-primary'>
+                                                <i class='bi bi-eye'></i> View
+                                            </a>
+                                        </td>
                                             <td>
                                                 <i class = 'bi bi-pencil-fill text-primary me-2' title='Edit' role='button'></i>
                                                 <a href = 'course_del.php?did= " .$row['course_id']." '><i class='bi bi-trash-fill text-danger' title='Delete' role='button'></i></a>
@@ -105,6 +112,10 @@
             </div>
         </div>
         <!-- Add Student Modal Start -->
+         <?php
+            include "dbdata.php";
+            $teacherResult = mysqli_query($connect, "SELECT * FROM teachers");    
+        ?>
         <div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -122,10 +133,9 @@
                                 </p>
                             </div>
                         </div>
-                        
                         <!-- Form Content -->
                         <div class="col-md-8 col-lg-9">
-                            <form id="addCourseForm" name="student_form" method="post" action="insert_course.php">
+                            <form id="addCourseForm" name="student_form" method="post" action="insert_course.php" enctype="multipart/form-data">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="addCourseModalLabel">Courses Form</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -138,31 +148,42 @@
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label for="coursecode" class="form-label">Course Code</label>
-                                            <input type="text" class="form-control" id="coursecode" name="courseCode" required>
+                                            <input type="text" class="form-control" id="coursecode" name="courseCode">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label for="courseName" class="form-label">Course Name</label>
-                                            <input type="text" class="form-control" id="courseName" name= "courseName" required>
+                                            <input type="text" class="form-control" id="courseName" name= "courseName">
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="instructor" class="form-label">Instructor</label>
-                                            <input type="text" class="form-control" id="instructor" name="courseInstructor" required>
+                                            <label for="instructor" class="form-label">Teacher</label>
+                                            <select class="form-select" id="instructor" name="courseInstructor">
+                                                <option value="">Select Teacher ID</option>
+                                                <?php while($row = mysqli_fetch_array($teacherResult)) {
+                                                    echo "<option value='{$row['tch_id']}'>{$row['tch_id']} - {$row['tch_username']}</option>";
+                                                } ?>
+                                            </select>
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="duration" class="form-label">Duration</label>
-                                        <input type="text" class="form-control" id="duration" name="courseDuration" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
-                                        <input type="text" class="form-control" id="description" name = "courseDescription" required>
+                                        <input type="text" class="form-control" id="description" name = "courseDescription">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="duration" class="form-label">Duration</label>
+                                            <input type="text" class="form-control" id="duration" name="courseDuration">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="course_outline" class="form-label">Course Outline</label>
+                                            <input type="file" class="form-control" id="course_outline" name = "courseOutline" accept=".pdf">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Add Student</button>
+                                    <button type="submit" class="btn btn-primary">Add Course</button>
                                 </div>
                             </form>
                         </div>

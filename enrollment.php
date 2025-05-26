@@ -116,58 +116,81 @@
             $studentResult = mysqli_query($connect, "SELECT * FROM students");
             $courseResult = mysqli_query($connect, "SELECT * FROM courses");        
         ?>
-        
         <div class="modal fade" id="addenrollmentModal" tabindex="-1" aria-labelledby="addenrollmentModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form id="addenrollmentForm" name="enrollment_form" method="post" action = "insert_enrollment.php">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addStudentModalLabel">Add New Enrollment</h5>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for=enroll_id" class="form-label">Enroll_id</label>
-                                <input type="text" class="form-control" id="enroll_id" name="Enroll_id" required>
+                    <div class="row g-0">
+                        <!-- Sidebar Section -->
+                        <div class="col-md-4 col-lg-3 form-sidebar">
+                            <div>
+                                <h4 class="fs-4">Add Enrollment</h4>
+                                <p class="text-black-50 mb-4">Fill in the enrollment details to register the student for a course.</p>
                             </div>
-                            <div class="mb-3">
-                                <label for="enrollStd_id" class="form-label">EStd_id</label>
-                                <select class="form-select" id="enrollStd_id" name = "EnrollStd_id" required>
-                                    <option value="">Select Student ID</option>
-                                    <?php while($row = mysqli_fetch_array($studentResult)) {
-                                        echo "<option value='{$row['std_id']}'>{$row['std_id']} - {$row['std_name']}</option>";
-                                    } ?>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="enrollCourse_id" class="form-label">ECourse_id</label>
-                                <select class="form-select" id="enrollCourse_id" name = "EnrollCourse_id" required>
-                                    <option value="">Select Course ID</option>
-                                    <?php while($row = mysqli_fetch_array($courseResult)) {
-                                        echo "<option value='{$row['course_id']}'>{$row['course_id']} - {$row['course_name']}</option>";
-                                    } ?>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rollno" class="form-label">Roll NO</label>
-                                <input type="text" class="form-control" id="rollno" name = "rollno" required>
-                            </div>
-                             <div class="mb-3">
-                                <label for="enroll_session" class="form-label">Session</label>
-                                <input type="text" class="form-control" id="enroll_session" name = "Enroll_session" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="shift" class="form-label">Shift</label>
-                                <select class="form-select" id="shift" name = "enroll_shift" required>
-                                    <option value="morning">Morning</option>
-                                    <option value="evening">Evening</option>
-                                </select>
+                            <div class="form-sidebar-info">
+                                <h5 class="fs-6 mb-2">Important</h5>
+                                <p class="text-black-50 small mb-0">
+                                    Ensure all fields are correctly filled before submitting the form.
+                                </p>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" name="submit" class="btn btn-primary">Enroll</button>
+                        <!-- Form Section -->
+                        <div class="col-md-8 col-lg-9">
+                            <form id="addenrollmentForm" name="enrollment_form" method="post" action="insert_enrollment.php">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addenrollmentModalLabel" style="font-weight:600">Enrollment Form</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="enroll_id" class="form-label">Enrollment ID *</label>
+                                            <input type="text" class="form-control" id="enroll_id" name="Enroll_id">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="rollno" class="form-label">Roll Number *</label>
+                                            <input type="text" class="form-control" id="rollno" name="rollno">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="enrollStd_id" class="form-label">Student ID *</label>
+                                            <select class="form-select" id="enrollStd_id" name="EnrollStd_id">
+                                                <option value="">Select Student ID</option>
+                                                <?php while($row = mysqli_fetch_array($studentResult)) {
+                                                    echo "<option value='{$row['std_id']}'>{$row['std_id']} - {$row['std_name']}</option>";
+                                                } ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="enrollCourse_id" class="form-label">Course ID *</label>
+                                            <select class="form-select" id="enrollCourse_id" name="EnrollCourse_id">
+                                                <option value="">Select Course ID</option>
+                                                <?php while($row = mysqli_fetch_array($courseResult)) {
+                                                    echo "<option value='{$row['course_id']}'>{$row['course_id']} - {$row['course_name']}</option>";
+                                                } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="enroll_session" class="form-label">Session *</label>
+                                            <input type="text" class="form-control" id="enroll_session" name="Enroll_session">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="shift" class="form-label">Shift *</label>
+                                            <select class="form-select" id="shift" name="enroll_shift">
+                                                <option value="morning">Morning</option>
+                                                <option value="evening">Evening</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" name="submit" class="btn btn-primary">Enroll</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
