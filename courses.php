@@ -62,19 +62,15 @@
                 <!--Start Courses Table -->
                 <?php
                     include "dbdata.php";
-                    $sql = "SELECT c.course_id, c.course_code, c.course_name, t.tfull_name, c.course_duration, c.course_description, c.course_outline 
-                    FROM courses c
-                    JOIN teachers t ON c.tcourse_id = t.tch_Id";
+                    $sql = "select * from courses";
                     $result =mysqli_query($connect, $sql);
                 ?>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover bg-white shadow-sm">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Course ID</th>
-                                        <th>Course Code</th>
-                                        <th>Course Name</th>
-                                        <th>Instructor</th>
+                                        <th>Serial#</th>
+                                        <th>Program</th>
                                         <th>Duration</th>
                                         <th>Description</th>
                                         <th>Outline</th>
@@ -83,13 +79,11 @@
                                 </thead>
                                 <tbody id="courseTable">
                                 <?php
+                                $sno = 1;
                                 while($row = mysqli_fetch_array($result)){
-                                    echo "
-                                        <tr>
-                                            <td>$row[course_id]</td>
-                                            <td>$row[course_code]</td>
+                                    echo "<tr>
+                                        <td>$sno</td>
                                             <td>$row[course_name]</td>
-                                            <td>$row[tfull_name]</td>
                                             <td>$row[course_duration]</td>
                                             <td>$row[course_description]</td>
                                             <td>
@@ -97,17 +91,17 @@
                                                 <i class='bi bi-eye'></i> View
                                             </a>
                                         </td>
-                                            <td>
-                                                <i class = 'bi bi-pencil-fill text-primary me-2' title='Edit' role='button'></i>
-                                                <a href = 'course_del.php?did= " .$row['course_id']." '><i class='bi bi-trash-fill text-danger' title='Delete' role='button'></i></a>
-                                            </td>  
-                                           
+                                        <td>
+                                            <i class = 'bi bi-pencil-fill text-primary me-2' title='Edit' role='button'></i>
+                                            <a href = 'course_del.php?did= " .$row['course_id']." '><i class='bi bi-trash-fill text-danger' title='Delete' role='button'></i></a>
+                                        </td>  
                                         </tr>";
+                                        $sno++;
                                         } 
                                     ?>   
-                                </tbody>
-                            </table>
-                        </div>    
+                            </tbody>
+                        </table>
+                    </div>    
                 <!--End Courses Table-->
             </div>
         </div>

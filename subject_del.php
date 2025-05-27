@@ -29,42 +29,18 @@
                 include "topbar.php";
             ?>
             <!-- Top Bar End -->
-           <?php
-                // Get form data
-                $course_ID = $_REQUEST['courseId'];
-                $course_Name = $_REQUEST['courseName'];
-                $course_Duration = $_REQUEST['courseDuration'];
-                $course_Description = $_REQUEST['courseDescription'];
-
-                // File upload
-                $course_outline = $_FILES['courseOutline']['name']; // file name
-                $tmp_name = $_FILES['courseOutline']['tmp_name'];   // temporary file location
-
-                // Upload folder
-                $upload_folder = "uploads/";
-                $upload_path = $upload_folder . time() . "_" . $course_outline;
-
-                // Move file
-                if (move_uploaded_file($tmp_name, $upload_path)) {
-                    include "dbdata.php";
-                    $sql = "INSERT INTO courses SET 
-                            course_id = '$course_ID', 
-                            course_name = '$course_Name', 
-                            course_duration = '$course_Duration', 
-                            course_description = '$course_Description', 
-                            course_outline = '$upload_path'";
-                    $result = mysqli_query($connect, $sql);
-                    if ($result > 0) {
-                        echo "<p class='px-4 pt-5'>1 More Record Inserted</p>";
-                        echo "<a href='courses.php' class='px-4 pt-5'>View Data</a>";
-                    } 
-                    else {
-                        echo "Database insert error.";
-                    }
-                } 
-                else {
-                    echo "File upload failed.";
+            <?php
+                include "dbdata.php";
+                $did = intval($_REQUEST['did']);
+                $sql = "delete from subjects where subject_id = $did";
+                $result = mysqli_query($connect, $sql);
+                if($result > 0)
+                {
+                    echo "<p class='px-4 pt-5'>1 Record Deleted</p>";
+                    echo "<a href = 'subjects.php' class='px-4 pt-5'> View Data </a>"; 
                 }
+                else
+                    echo "invalid";
             ?>
         </div>
         <!--End Content-->

@@ -34,7 +34,7 @@
                 </div>
                 <div class="px-4">
                     <!-- Button to Open Modal -->
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addenrollmentModal">+ Add New Enrollment</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addsubjectModal">+ Add New Subject</button>
                 </div>
             </div>
             <div class="container-fluid mt-4 px-4">
@@ -65,10 +65,9 @@
                 <!--Start Student Table -->
                 <?php
                     include "dbdata.php";
-                    $sql = "SELECT e.enroll_id, s.std_name, c.course_name, e.roll_no, e.enroll_session, e.shift 
-                    FROM enrollment e
-                    JOIN students s ON e.EStd_id = s.std_id
-                    JOIN courses c ON e.ECourse_id = c.course_id";
+                    $sql = "SELECT c.course_name, s.semester, s.subject_name, s.programe_session
+                    FROM subjects s
+                    JOIN courses c ON s.scourse_id = c.course_id";
                     $result =mysqli_query($connect, $sql);
                     
                 ?>
@@ -77,34 +76,31 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Serial#</th>
-                                        <th>EStd_Name</th>
-                                        <th>ECourse_Name</th>
-                                        <th>Roll NO</th>
+                                        <th>Course Name</th>
+                                        <th>Semester</th>
+                                        <th>Subject Name</th>
                                         <th>Session</th>
-                                        <th>Shift</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="studentTable">
                                 <?php
-                                $sno = 1;
-                                while($row = mysqli_fetch_array($result)){
-                                    echo "<tr>
-                                        <td>$sno</td>
-                                            <td>$row[std_name]</td>
-                                            <td>$row[course_name]</td>
-                                            <td>$row[roll_no]</td>
-                                            <td>$row[enroll_session]</td>
-                                            <td><span class='status-badge status-active status-inactive'>$row[shift]</span></td>
-                                            <td>
-                                                <i class = 'bi bi-pencil-fill text-primary me-2' title='Edit' role='button'></i>
-                                                <a href = 'enrollment_del.php?did= " .$row['enroll_id']." '><i class='bi bi-trash-fill text-danger' title='Delete' role='button'></i></a>
-                                            </td>  
-                                           
-                                        </tr>";
-                                        $sno++;
+                                    $sno = 1;
+                                    while($row = mysqli_fetch_array($result)){
+                                        echo "<tr>
+                                                <td>$sno</td>
+                                                <td>$row[course_name]</td>
+                                                <td>$row[semester]</td>
+                                                <td>$row[subject_name]</td>
+                                                <td>$row[programe_session]</td>
+                                                <td>
+                                                    <i class='bi bi-pencil-fill text-primary me-2' title='Edit' role='button'></i>
+                                                    <a href='subject_del.php?did=" . $row['course_name'] . "'><i class='bi bi-trash-fill text-danger' title='Delete' role='button'></i></a>
+                                                </td>   
+                                            </tr>";
+                                            $sno++;
                                         } 
-                                        ?>   
+                                    ?>   
                                 </tbody>
                             </table>
                         </div>    
@@ -114,10 +110,9 @@
         <!-- Add Student Table Start -->
          <?php
             include "dbdata.php";
-            $studentResult = mysqli_query($connect, "SELECT * FROM students");
             $courseResult = mysqli_query($connect, "SELECT * FROM courses");        
         ?>
-        <div class="modal fade" id="addenrollmentModal" tabindex="-1" aria-labelledby="addenrollmentModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addsubjectModal" tabindex="-1" aria-labelledby="addsubjectModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="row g-0">
@@ -136,51 +131,48 @@
                         </div>
                         <!-- Form Section -->
                         <div class="col-md-8 col-lg-9">
-                            <form id="addenrollmentForm" name="enrollment_form" method="post" action="insert_enrollment.php">
+                            <form id="addsubjectForm" name="enrollment_form" method="post" action="insert_subjects.php">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="addenrollmentModalLabel" style="font-weight:600">Enrollment Form</h5>
+                                    <h5 class="modal-title" id="addenrollmentModalLabel" style="font-weight:600">Subject Form</h5>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="enroll_id" class="form-label">Enrollment ID *</label>
-                                            <input type="text" class="form-control" id="enroll_id" name="Enroll_id">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="rollno" class="form-label">Roll Number *</label>
-                                            <input type="text" class="form-control" id="rollno" name="rollno">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="enrollStd_id" class="form-label">Student ID *</label>
-                                            <select class="form-select" id="enrollStd_id" name="EnrollStd_id">
-                                                <option value="">Select Student ID</option>
-                                                <?php while($row = mysqli_fetch_array($studentResult)) {
-                                                    echo "<option value='{$row['std_id']}'>{$row['std_id']} - {$row['std_name']}</option>";
-                                                } ?>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="enrollCourse_id" class="form-label">Course ID *</label>
-                                            <select class="form-select" id="enrollCourse_id" name="EnrollCourse_id">
+                                            <label for="scourse_name" class="form-label">Course Name *</label>
+                                            <select class="form-select" id="scourse_name" name="scourse_name">
                                                 <option value="">Select Course ID</option>
                                                 <?php while($row = mysqli_fetch_array($courseResult)) {
                                                     echo "<option value='{$row['course_id']}'>{$row['course_id']} - {$row['course_name']}</option>";
                                                 } ?>
                                             </select>
                                         </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="semester" class="form-label">Semester *</label>
+                                            <select class="form-control" id="semester" name="semester">
+                                                <option value="">Select Semester</option>
+                                                <?php
+                                                for ($sem = 1; $sem <= 10; $sem++) {
+                                                    echo "<option value=\"$sem\">Semester $sem</option>";
+                                                }
+                                                ?>
+                                            </select>
+
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label for="enroll_session" class="form-label">Session *</label>
-                                            <input type="text" class="form-control" id="enroll_session" name="Enroll_session">
+                                            <label for="subject_name" class="form-label">Subject Name *</label>
+                                            <input type="text" class="form-control" id="subject_name" name="subject_name">
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label for="shift" class="form-label">Shift *</label>
-                                            <select class="form-select" id="shift" name="enroll_shift">
-                                                <option value="morning">Morning</option>
-                                                <option value="evening">Evening</option>
+                                            <label for="session_year" class="form-label">Session *</label>
+                                            <select  class="form-control" id="session_year" name="session_year">
+                                                <option value="">Select Session</option>
+                                                <?php
+                                                for ($year = 2025; $year <= 2050; $year++) {
+                                                    echo "<option value=\"$year\">$year</option>";
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>

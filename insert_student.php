@@ -31,7 +31,6 @@
             <!-- Top Bar End -->
             <?php
                 include 'dbdata.php';
-                $std_id = $_REQUEST['std_id'];
                 $fullName = $_REQUEST['fullName'];
                 $fatherName = $_REQUEST ['father_Name'];
                 $Std_Username = $_REQUEST['std_username'];
@@ -73,9 +72,9 @@
 
                 // Insert query
                 $sql = "INSERT INTO students 
-                    (std_id, std_name, f_name, std_username, std_password, s_gender, contact_no, std_address, std_email, std_dob, std_cnic, cnic_picture, std_picture, std_status, guardian_name, guardian_cnic, relation_guardian)
+                    (std_name, f_name, std_username, std_password, s_gender, contact_no, std_address, std_email, std_dob, std_cnic, cnic_picture, std_picture, std_status, guardian_name, guardian_cnic, relation_guardian)
                     VALUES 
-                    ('$std_id', '$fullName', '$fatherName', '$Std_Username', '$Std_Password', '$Std_Gender', '$contact', '$address', '$email',  '$dob', '$cnic', '$cnicTarget', '$studentTarget', '$status', '$Std_guardian_name', '$Std_guardian_cnic', '$Relation_guardian')";
+                    ('$fullName', '$fatherName', '$Std_Username', '$Std_Password', '$Std_Gender', '$contact', '$address', '$email',  '$dob', '$cnic', '$cnicTarget', '$studentTarget', '$status', '$Std_guardian_name', '$Std_guardian_cnic', '$Relation_guardian')";
 
                 if (mysqli_query($connect, $sql)) {
                     echo "<script>

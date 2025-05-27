@@ -17,7 +17,7 @@
         
     </head>
     <body>
-        <!--Sidebar Start-->
+         <!--Sidebar Start-->
         <?php
             include "sidebar.php";
         ?>
@@ -29,7 +29,29 @@
                 include "topbar.php";
             ?>
             <!-- Top Bar End -->
-        </div>    
+           <?php
+                include 'dbdata.php';
+                $Scourse_Name = $_REQUEST['scourse_name'];
+                $programe_semster = $_REQUEST['semester'];
+                $Subject_name= $_REQUEST['subject_name'];
+                $programe_session = $_REQUEST['session_year'];
+                include "dbdata.php";
+                $sql = "INSERT INTO subjects SET 
+                        scourse_id = '$Scourse_Name', 
+                        semester = '$programe_semster', 
+                        subject_name = '$Subject_name', 
+                        programe_session = '$programe_session'";
+                        $result = mysqli_query($connect, $sql);
+
+                if($result > 0){
+                echo "<p class='px-4 pt-5'>1 More Record Inserted</p>";
+                echo "<a href = 'subjects.php' class='px-4 pt-5'> View Data </a>";
+                }
+                else{
+                    echo "error";
+                }    
+            ?>
+        </div>
         <!--End Content-->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -40,4 +62,4 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
     </body>
-</html>
+</html>    

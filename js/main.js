@@ -373,7 +373,6 @@ $(document).ready(function () {
 $(document).on("click", ".viewBtn", function () {
     const btn = $(this);
     // Set student data
-    $("#viewId").text(btn.data("id"));
     $("#viewName").text(btn.data("name"));
     $("#viewFname").text(btn.data("fname"));
     $("#viewUname").text(btn.data("uname"));

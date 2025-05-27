@@ -67,7 +67,7 @@
                     <table class="table table-bordered table-hover bg-white shadow-sm">
                         <thead class="table-light">
                             <tr>
-                                <th>Std_id</th>
+                                <th>Serial#</th>
                                 <th>Full Name</th>
                                 <th>Father Name</th>
                                 <th>Contact No</th>
@@ -81,9 +81,10 @@
                         </thead>
                         <tbody id="studentTable">
                             <?php
+                                $sno = 1;
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr>
-                                        <td>$row[std_id]</td>
+                                        <td>$sno</td>
                                         <td class='d-flex align-items-center gap-2'>
                                             <img src='$row[std_picture]' alt='Student' width='50' height='50' class='rounded-circle object-fit-cover'>
                                             $row[std_name]
@@ -100,7 +101,6 @@
                                         <td><span class='status-badge'>$row[std_status]</span></td>
                                         <td>
                                             <button class='btn btn-sm btn-info viewBtn' 
-                                                data-id='$row[std_id]'
                                                 data-name='$row[std_name]'
                                                 data-fname='$row[f_name]'
                                                 data-uname='$row[std_username]'
@@ -126,6 +126,7 @@
                                             <a href='student_del.php?did=" . $row['std_id'] . "'><i class='bi bi-trash-fill text-danger' title='Delete' role='button'></i></a>
                                         </td>  
                                     </tr>";
+                                    $sno++;
                                 } 
                             ?>   
                         </tbody>
@@ -135,6 +136,33 @@
                 </div>    
             </div>
         </div>
+
+        <!-- Total Students Card -->
+        <div class="container-fluid mt-4 px-4 mb-4">
+            <div class="row">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card border-2 border-primary shadow-lg" 
+                         style="border-radius: 15px; background-color: #fbc53c68;">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="position-relative">
+                                    <h6 class="text-primary mb-2" style="font-weight: 600;">Total Students</h6>
+                                    <h2 class="display-4 mb-2 fw-bold text-dark">
+                                        <?php echo $sno - 1; ?>
+                                    </h2>
+                                    
+                                </div>
+                                <div class="text-primary" style="font-size: 3.5rem;">
+                                    <i class="bi bi-mortarboard-fill opacity-75"></i>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Add Student Modal Start -->
         <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -285,10 +313,7 @@
                         <!-- Info Table with View PDF Button Inside -->
                         <table class="table table-bordered view-Table table-hover bg-white shadow-sm">
                             <tbody>
-                                <tr>
-                                    <th class="table-light">ID</th>
-                                    <td id="viewId"></td>
-                                </tr>
+                                
                                 <tr>
                                     <th class="table-light">Full Name</th>
                                     <td id="viewName"></td>

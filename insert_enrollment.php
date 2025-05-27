@@ -42,7 +42,7 @@
 
                 if($result > 0){
                 echo "<p class='px-4 pt-5'>1 More Record Inserted</p>";
-                echo "<a href = 'enrollment.php' class='px-4 pt-5'> View Data </a>";
+                echo "<a href = 'subjects.php' class='px-4 pt-5'> View Data </a>";
                 }
                 else{
                     echo "error";

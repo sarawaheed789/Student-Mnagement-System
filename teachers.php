@@ -67,7 +67,7 @@
                     <table class="table table-bordered table-hover bg-white shadow-sm">
                         <thead class="table-light">
                             <tr>
-                                <th>Tch_id</th>
+                                <th>Serial#</th>
                                 <th>Full Name</th>
                                 <th>Username</th>
                                 <th>Password</th>
@@ -81,9 +81,10 @@
                         </thead>
                         <tbody id="teacherTable">
                             <?php
+                                $sno = 1;
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr>
-                                        <td>$row[tch_id]</td>
+                                        <td>$sno</td>
                                         <td class='d-flex align-items-center gap-2'>
                                             <img src='$row[tch_pic]' alt='Teacher' width='50' height='50' class='rounded-circle object-fit-cover'>
                                             $row[tfull_name]
@@ -127,6 +128,7 @@
                                             <a href='teacher_del.php?did=" . $row['tch_id'] . "'><i class='bi bi-trash-fill text-danger' title='Delete' role='button'></i></a>
                                         </td>  
                                     </tr>";
+                                    $sno++;
                                 } 
                             ?>   
                         </tbody>
